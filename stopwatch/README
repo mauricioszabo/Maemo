@@ -1,0 +1,24 @@
+A simple stopwatch, configured by  YAML files.
+
+Usage:
+    ./stopwatch.rb <yaml_file>
+
+yaml_file is a simple configuration file in the following format:
+
+<hour>: <text>
+
+OR
+
+<hour>:
+  text: <text>
+  color: <color>
+
+For example, imagine you want to, at 10 minutes, display a message
+like "show slides 10 to 20", and at 20 minutes, change the color of
+the stopwatch. You can use the following YAML:
+
+00:10: show slides 10 to 20
+00:20:
+  color: blue
+
+Enjoy!
