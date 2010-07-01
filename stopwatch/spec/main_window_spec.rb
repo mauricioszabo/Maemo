@@ -8,6 +8,7 @@ describe MainWindow do
         text: foo
         color: FF0000
     EOF
+    MainWindow.send :attr_accessor, :label
     MainWindow.send :attr_accessor, :clock
     MainWindow.send :attr_accessor, :timer
     MainWindow.send :attr_accessor, :start_pause
@@ -21,6 +22,7 @@ describe MainWindow do
     @window.clock.text = ''
     GLib::Timeout.should_receive(:add).with(500)
     @window.start_pause_clock
+    @window.update_clock #Main Loop not running, must update manually
     @window.clock.text.should == '00:00'
     @window.start_pause.label.should == 'Pause'
   end
@@ -39,11 +41,21 @@ describe MainWindow do
     @window.timer.should be_nil
     @window.clock.text.should == '00:00'
   end
-end
 
-def mock_widget(widget)
-  m = mock
-  widget.stub!(:new).and_return(m)
-  m.stub! :signal_connect
-  m.stub! :add
+  it 'should change the label' do
+    @window.start_pause_clock
+    @window.update_clock #Main Loop not running, must update manually
+    @window.label.text.should == 'Foo'
+  end
+
+  it 'should change the label' do
+    @window.start_pause_clock
+    @window.update_clock #Main Loop not running, must update manually
+
+    @window.timer.stub!(:elapsed).and_return([5, 0])
+    Gdk::Color.should_receive(:parse).with("#FF0000").and_return(c = mock)
+    @window.label.should_receive(:modify_fg).with(Gtk::STATE_NORMAL, c)
+    @window.clock.should_receive(:modify_fg).with(Gtk::STATE_NORMAL, c)
+    @window.update_clock #Main Loop not running, must update manually
+  end
 end

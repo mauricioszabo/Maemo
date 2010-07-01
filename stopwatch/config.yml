@@ -1,4 +1,6 @@
-00:00: Foo
-00:01:
-  text: foo
+00:01: Foo
+00:04:
+  text: Foo Bar Baz
   color: FF0000
+00:06:
+  color: blue
